@@ -1,0 +1,17 @@
+char:0 
+char:1 
+char:2 
+char:3 
+char:4 
+char:5 
+
+char:39 '
+
+
+
+char:71 G
+01 e
+    char:102 f
+    char:103 g
+char:104 h
+char:105 i
