@@ -1,0 +1,54 @@
+stages:          
+  - build
+  - style
+  - tests
+  - deploy
+
+build:       
+  stage: build
+  tags:
+    - build
+  script:
+    - cd src/cat
+    - make s21_cat
+    - cd ../grep
+    - make s21_grep
+  artifacts:
+    paths:
+      - src/cat/s21_cat
+      - src/grep/s21_grep
+    expire_in: 30 days
+
+style:       
+  stage: style
+  tags:
+    - style
+  script:
+    - cp materials/linters/.clang-format src/
+    - clang-format -n --Werror src/*/*.c
+
+tests:       
+  stage: tests
+  tags:
+    - tests
+  needs:
+    - build
+    - style
+  script:
+    - cd src/cat
+    - bash test.sh
+    - cd ../grep
+    - bash test.sh
+
+deploy:       
+  stage: deploy
+  tags:
+    - deploy
+  needs:
+    - build
+    - style
+    - tests
+  when: manual
+  script:
+    - chmod +x src/deploy.sh
+    - bash src/deploy.sh  
